@@ -5,15 +5,19 @@ import java.awt.*;
 import java.util.*;
 import com.toedter.calendar.JDateChooser;
 import java.awt.event.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 public class SignupOne extends JFrame implements ActionListener{
     
     long random;
-    JTextField nameTextField,fnameTextField,emailTextField,addressTextField,cityTextField,stateTextField,pincodeTextField;
+    JTextField nameTextField,fnameTextField,emailTextField,addressTextField,cityTextField,stateTextField,pincodeTextField,phoneTextField;
     JButton next;
     JRadioButton male,female,other,married,unmarried ;
     JDateChooser dateChooser;
+    String EMAIL_REGEX = "^[a-zA-Z0-9_+&-]+(?:\\.[a-zA-Z0-9_+&-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
+    Pattern EMAIL_PATTERN = Pattern.compile(EMAIL_REGEX);
     
     SignupOne(){
         
@@ -33,7 +37,7 @@ public class SignupOne extends JFrame implements ActionListener{
         add(personalDetails);
         
         
-        JLabel name=new JLabel("Name:");
+        JLabel name=new JLabel("Name*:");
         name.setFont(new Font("Raleway",Font.BOLD,20));
         name.setBounds(100,140,100,30);
         add(name);
@@ -93,7 +97,7 @@ public class SignupOne extends JFrame implements ActionListener{
         gendergroup.add(other);
         
         
-        JLabel email=new JLabel("E-mail ID:");
+        JLabel email=new JLabel("E-mail ID*:");
         email.setFont(new Font("Raleway",Font.BOLD,20));
         email.setBounds(100,300,150,30);
         add(email);
@@ -166,19 +170,29 @@ public class SignupOne extends JFrame implements ActionListener{
         pincodeTextField.setFont(new Font("Raleway",Font.BOLD,14));
         pincodeTextField.setBounds(300,500,400,30);
         add(pincodeTextField);
+        
+        JLabel phone=new JLabel("Phone number*:");
+        phone.setFont(new Font("Raleway",Font.BOLD,20));
+        phone.setBounds(100,540,160,30);
+        add(phone);
+        
+        phoneTextField=new JTextField();
+        phoneTextField.setFont(new Font("Raleway",Font.BOLD,14));
+        phoneTextField.setBounds(300,540,400,30);
+        add(phoneTextField);
     
         
         next = new JButton("NEXT");
         next.setBackground(Color.BLACK);
         next.setForeground(Color.WHITE);
-        next.setBounds(620,550,80,30);
+        next.setBounds(620,590,80,30);
         next.addActionListener(this);
         add(next);
         
         getContentPane().setBackground(Color.WHITE);
     
-        setSize(850,800);
-        setLocation(350,10);
+        setSize(1550,850);
+        setLocation(0,0);
         setVisible(true);
     }
     @Override
@@ -209,14 +223,22 @@ public class SignupOne extends JFrame implements ActionListener{
         String city= cityTextField.getText();
         String state= stateTextField.getText();
         String pincode= pincodeTextField.getText();
+        String phone= phoneTextField.getText();
+        
+        
+        Matcher matcher =EMAIL_PATTERN.matcher (email);
         
         try{
-            if(name.equals("")){
-                JOptionPane.showMessageDialog(null, "Name is required");
+            if(name.equals("") || email.equals("")){
+                JOptionPane.showMessageDialog(null, "Required fields are empty");
+            }else if(!matcher.matches()){
+                JOptionPane.showMessageDialog(null, "Invalid email"); 
+            }else if(phone.length()>10||phone.length()<10){
+                JOptionPane.showMessageDialog(null, "Phone number Should be 0f 10 digits"); 
             }
             else{
                 Conn c=new Conn();
-                String query="INSERT INTO signup VALUES('"+formno+"','"+name+"','"+fname+"','"+dob+"','"+gender+"','"+email+"','"+marital+"','"+address+"','"+city+"','"+state+"','"+pincode+"')";
+                String query="INSERT INTO signup VALUES('"+formno+"','"+name+"','"+fname+"','"+dob+"','"+gender+"','"+email+"','"+marital+"','"+address+"','"+city+"','"+state+"','"+pincode+"','"+phone+"')";
                 c.s.executeUpdate(query);
                 
                 setVisible(false);

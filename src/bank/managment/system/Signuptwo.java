@@ -93,7 +93,7 @@ public class Signuptwo extends JFrame implements ActionListener{
         add(Occupation);
         
         
-        JLabel pan_no=new JLabel("Pan No:");
+        JLabel pan_no=new JLabel("Pan No*:");
         pan_no.setFont(new Font("Raleway",Font.BOLD,20));
         pan_no.setBounds(100,370,150,30);
         add(pan_no);
@@ -104,7 +104,7 @@ public class Signuptwo extends JFrame implements ActionListener{
         add(panTextField);
         
         
-        JLabel aadhar=new JLabel("Aadhar No:");
+        JLabel aadhar=new JLabel("Aadhar No*:");
         aadhar.setFont(new Font("Raleway",Font.BOLD,20));
         aadhar.setBounds(100,410,150,30);
         add(aadhar);
@@ -164,8 +164,8 @@ public class Signuptwo extends JFrame implements ActionListener{
         
         getContentPane().setBackground(Color.WHITE);
     
-        setSize(850,800);
-        setLocation(350,10);
+        setSize(1550,850);
+        setLocation(0,0);
         setVisible(true);
     }
     @Override
@@ -180,6 +180,8 @@ public class Signuptwo extends JFrame implements ActionListener{
         
         String pan= panTextField.getText();
         String aadhar= aadharTextField.getText();
+        
+        
         
         String senior=null;
         if(yes.isSelected()){
@@ -199,13 +201,18 @@ public class Signuptwo extends JFrame implements ActionListener{
         
         
         try{
-            
+         if(pan.length()>10||pan.length()<10){
+            JOptionPane.showMessageDialog(null, "Pan number Should be 0f 10 digits");           
+        }else if(aadhar.length()>12||aadhar.length()<12){
+            JOptionPane.showMessageDialog(null, "Aadhar number Should be 0f 12 digits");           
+        }else{
             Conn c=new Conn();
             String query="INSERT INTO signup2 VALUES('"+formno+"','"+religion+"','"+category+"','"+income+"','"+education+"','"+occupation+"','"+pan+"','"+aadhar+"','"+senior+"','"+account+"')";
             c.s.executeUpdate(query);
           
             setVisible(false);
             new Signup3(formno).setVisible(true);
+         }
         }
                         
         catch(Exception e){   

@@ -3,6 +3,7 @@ package bank.managment.system;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import java.sql.*;
 
 
 public class Login extends JFrame implements ActionListener{
@@ -12,7 +13,6 @@ public class Login extends JFrame implements ActionListener{
     JButton signin,clear,signup;
   
     Login(){                     
-        setTitle("BANKING SYSTEM");
         
         ImageIcon i1 = new ImageIcon(ClassLoader.getSystemResource("icons/logo.jpg"));
         Image i2 = i1.getImage().getScaledInstance(100, 100, Image.SCALE_DEFAULT);
@@ -78,8 +78,8 @@ public class Login extends JFrame implements ActionListener{
         
         getContentPane().setBackground(Color.WHITE);
         
-        setSize(800,480);
-        setLocation(550,200);
+        setSize(1550,850);
+        setLocation(0,0);
         setVisible(true);
         
     }
@@ -88,8 +88,23 @@ public class Login extends JFrame implements ActionListener{
     @Override
     public void actionPerformed(ActionEvent ae) {
         if(ae.getSource()==signin){
+            String cardnumber = cardTextField.getText();
+            String pinnumber =pinPasswordField.getText();
+            String query="select *from signup32 where cardnumber='"+cardnumber+"' and pinnumber='"+pinnumber+"' ";
+            try{
+                 Conn c = new Conn();
+                ResultSet rs= c.s.executeQuery(query);
+                if(rs.next()){
+                    setVisible(false);
+                    new Menu(pinnumber).setVisible(true);
+                }else{
+                    JOptionPane.showMessageDialog(null,"Incorrect Card Number or Pin");
+                }
+            }catch(Exception e){}
         
         }else if(ae.getSource()==clear){
+            cardTextField.setText("");
+            pinPasswordField.setText("");
         
         }else if(ae.getSource()==signup){
              setVisible(false);

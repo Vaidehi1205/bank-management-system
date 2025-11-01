@@ -24,7 +24,7 @@ public class Signup3 extends JFrame implements ActionListener{
         l1.setBounds(280,40,450,40);
         add(l1);
         
-        JLabel type=new JLabel("Account Type:");
+        JLabel type=new JLabel("Account Type*:");
         type.setFont(new Font("Raleway",Font.BOLD,22));
         type.setBounds(100,140,200,30);                      
         add(type);
@@ -113,25 +113,25 @@ public class Signup3 extends JFrame implements ActionListener{
         add(c3);
         
         c4 = new JCheckBox("EMAIL AND SMS ALERT");
-         c4.setFont(new Font("Raleway",Font.BOLD,16));
+        c4.setFont(new Font("Raleway",Font.BOLD,16));
         c4.setBackground(Color.white);
         c4.setBounds(300,440,250,20);
         add(c4);
         
         c5 = new JCheckBox("CHEQUE BOOK");
-         c5.setFont(new Font("Raleway",Font.BOLD,16));
+        c5.setFont(new Font("Raleway",Font.BOLD,16));
         c5.setBackground(Color.white);
         c5.setBounds(100,470,200,20);
         add(c5);
         
         c6 = new JCheckBox("E-STATEMENT");
-         c6.setFont(new Font("Raleway",Font.BOLD,16));
+        c6.setFont(new Font("Raleway",Font.BOLD,16));
         c6.setBackground(Color.white);
         c6.setBounds(300,470,200,20);
         add(c6);
         
-        c7 = new JCheckBox("I hereby declare that the above entered details are correct.");
-         c7.setFont(new Font("Raleway",Font.BOLD,14));
+        c7 = new JCheckBox("I hereby declare that the above entered details are correct.*");
+        c7.setFont(new Font("Raleway",Font.BOLD,14));
         c7.setBackground(Color.white);
         c7.setBounds(100,530,500,20);
         add(c7);
@@ -142,7 +142,7 @@ public class Signup3 extends JFrame implements ActionListener{
         submit.setBounds(500,600,100,30);       
         add(submit);
         
-        cancel =new JButton("CANCEL");
+        cancel =new JButton("BACK");
         cancel.setBackground(Color.BLACK);
         cancel.setForeground(Color.WHITE);
         cancel.setBounds(630,600,100,30);        
@@ -153,8 +153,8 @@ public class Signup3 extends JFrame implements ActionListener{
         
          getContentPane().setBackground(Color.WHITE);
         
-        setSize(850,820);
-        setLocation(350,0);
+        setSize(1550,850);
+        setLocation(0,0);
         setVisible(true);
         
     }
@@ -175,10 +175,10 @@ public class Signup3 extends JFrame implements ActionListener{
         }
         
         Random ran = new Random();
-        long first7 = (ran.nextLong() % 90000000L) + 5040936000000000L;
+        long first7 = Math.abs((ran.nextLong() % 90000000L)) + 5040936000000000L;
         String cardnumber = "" + Math.abs(first7);
         
-        long first3 = (ran.nextLong() % 9000L) + 1000L;
+        long first3 = Math.abs(ran.nextLong() % 9000L) + 1000L;
         String pinnumber = "" + Math.abs(first3);
         
         String facility = "";
@@ -201,10 +201,16 @@ public class Signup3 extends JFrame implements ActionListener{
             facility = facility + " E-Statement";
         }
         
+        String select="";
+        if(c7.isSelected()){
+            select= "Selected";
+        }
+        
+        
         try{
             if(ae.getSource()==submit){
                 
-                if(accountType.equals("")){
+                if(accountType.equals("")|| select.equals("")){
                     JOptionPane.showMessageDialog(null, "Fill all the required fields");
                 }else{
                     Conn c = new Conn();
@@ -218,7 +224,8 @@ public class Signup3 extends JFrame implements ActionListener{
                 }
             
             }else if(ae.getSource()==cancel){
-                System.exit(0);
+                setVisible(false);
+                new Login().setVisible(true);
             }
             
         }catch(Exception ex){
